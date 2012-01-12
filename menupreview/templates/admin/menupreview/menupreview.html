@@ -1,0 +1,109 @@
+{% extends "admin/base_site.html" %}
+{% load menu_tags adminmedia i18n %}
+
+{% block bodyclass %}change-form{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="../../">{% trans 'Home' %}</a>
+    &rsaquo; <a href="../">{{ app_label|capfirst }}</a>
+    &rsaquo; {{ opts.verbose_name_plural|capfirst }}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+<style type="text/css">
+ul li.ancestor a, ul li.descendant a, ul li.sibling a {
+    font-weight: normal;
+    color: black;
+}
+
+li.selecteddescendant a, li.selected a, li.selectedsibling a {
+    font-weight: bold;
+    color: #417690;
+}
+
+#menupreview a:hover {
+    text-decoration: underline;
+}
+
+#loader-message {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    padding: 4px 8px;
+    background-color: #F1F8FF;
+    display: none;
+}
+</style>
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.min.js"></script>
+<script type="text/javascript" src="{% admin_media_prefix %}js/jquery.init.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+<div id="loader-message">{% trans 'Loading...' %}</div>
+<form action="{% url admin:cms_menupreview_changelist %}" method="GET" accept-charset="UTF-8">
+    {% if form.errors %}
+        {{ form.errors }}
+    {% endif %}
+    <fieldset class="module aligned">
+        <div class="form-row">
+            <div class="field-box">{{ form.start_level.label_tag }} {{ form.start_level }} <p class="help">{{ form.start_level.help_text }}</p></div>
+            <div class="field-box">{{ form.end_level.label_tag }} {{ form.end_level }} <p class="help">{{ form.end_level.help_text }}</p></div>
+        </div>
+        <div class="form-row">
+            <div class="field-box">{{ form.extra_inactive.label_tag }} {{ form.extra_inactive }} <p class="help">{{ form.extra_inactive.help_text }}</p></div>
+            <div class="field-box">{{ form.extra_active.label_tag }} {{ form.extra_active }} <p class="help">{{ form.extra_active.help_text }}</p></div>
+        </div>
+        <div class="form-row">
+            <div>{{ form.active_page.label_tag }} {{ form.active_page }} <p class="help">{{ form.active_page.help_text }}</p></div>
+        </div>
+    </fieldset>
+    <div class="submit-row1">
+        <input id="menupreview_submit" class="notdefault" type="submit" value="Preview">
+    </div>
+</form>
+<ul id="menupreview">
+{% if not form.errors %}
+{% show_menu form.start_level.value form.end_level.value form.extra_inactive.value form.extra_active.value %}
+{% else %}
+    <li>{% trans 'There was a problem with the form options selected.' %}</li>
+{% endif %}
+</ul>
+</div>
+<script type="text/javascript">
+(function($) {
+     $(document).ready(function() {
+         var loading = $('#loader-message');
+         var menu = $('#menupreview');
+         $('form').submit(function(e) {
+            e.preventDefault();
+            loading.show();
+            menu.hide();
+            var formaction = $(this).attr('action');
+            var formdata = $(this).serialize();
+            $.ajax({
+                url: formaction
+                , cache: false
+                , data: formdata
+                , success: function(d) {
+                    menu.html(d).fadeIn(500);
+                    loading.hide();
+                }
+                , error: function() {
+                    menu.fadeIn(500);
+                    loading.hide();
+                }
+            });
+    });});
+})(django.jQuery);
+</script>
+{% endblock %}

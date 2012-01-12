@@ -1,0 +1,6 @@
+{% load menu_tags i18n %}
+{% if not form.errors %}
+{% show_menu form.start_level.value form.end_level.value form.extra_inactive.value form.extra_active.value %}
+{% else %}
+    <li>{% trans 'There was a problem with the form options selected.' %}</li>
+{% endif %}
