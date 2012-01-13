@@ -16,15 +16,18 @@
 {% block extrastyle %}{{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
 <style type="text/css">
-ul li.ancestor a, ul li.descendant a, ul li.sibling a {
+li.descendant a {
+    background: white;
+    color: #5B80B2;
     font-weight: normal;
-    color: black;
 }
 
-li.selecteddescendant a, li.selected a, li.selectedsibling a {
+li.selecteddescendant a, .selected a, li.selectedsibling a {
     font-weight: bold;
-    color: #417690;
+    background: #5B80B2;
+    color: white;
 }
+
 
 #menupreview a:hover {
     text-decoration: underline;
