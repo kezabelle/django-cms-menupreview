@@ -1,0 +1,58 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% load adminmedia %}{% admin_media_prefix %}css/dashboard.css" />
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% if not is_popup %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="../../">{% trans 'Home' %}</a>
+    &rsaquo; <a href="../">{{ app_label|capfirst }}</a>
+    &rsaquo; {{ opts.verbose_name_plural|capfirst }}
+</div>
+{% endblock %}
+{% endif %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module">
+    <table summary="{% blocktrans with app_label|capfirst as name %}Models available in the {{ name }} application.{% endblocktrans %}">
+        <caption><a href="" class="section">{% blocktrans with app_label|capfirst as name %}{{ name }}{% endblocktrans %}</a></caption>
+        <tr>
+        <th scope="row"><a href="{% url admin:cms_menupreview_menu %}">{% trans 'Full menu preview' %}</a></th>
+        <td>&nbsp;</td>
+        <td><a href="{% url admin:cms_menupreview_menu %}" class="changelink">{% trans 'Change' %}</a></td>
+    </tr>
+        <tr>
+        <th scope="row"><a href="{% url admin:cms_menupreview_sub_menu %}">{% trans 'Sub menu preview' %}</a></th>
+        <td>&nbsp;</td>
+        <td><a href="{% url admin:cms_menupreview_sub_menu %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        {% if using_reverse_ids %}
+        <tr>
+        <th scope="row"><a href="{% url admin:cms_menupreview_menu_below_id %}">{% trans 'Menu below ID preview' %}</a></th>
+        <td>&nbsp;</td>
+        <td><a href="{% url admin:cms_menupreview_menu_below_id %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+        {% else %}
+        <tr>
+        <th scope="row">{% trans 'Menu below ID preview' %}</th><td colspan="2">&nbsp;</td>
+        </tr>
+        {% endif %}
+        <tr>
+        <th scope="row"><a href="{% url admin:cms_menupreview_cache_keys %}">{% trans 'Cache keys in use' %}</a></th>
+        <td>&nbsp;</td>
+        <td><a href="{% url admin:cms_menupreview_cache_keys %}" class="changelink">{% trans 'Change' %}</a></td>
+        </tr>
+
+    </table>
+    </div>
+</div>
+{% endblock %}
