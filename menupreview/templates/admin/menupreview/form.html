@@ -17,16 +17,57 @@
 {% block extrastyle %}{{ block.super }}
 <link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
 <style type="text/css">
-li.descendant a {
-    background: white;
-    color: #5B80B2;
-    font-weight: normal;
-}
-
+/*
 li.selecteddescendant a, .selected a, li.selectedsibling a {
     font-weight: bold;
     background: #5B80B2;
     color: white;
+}
+*/
+#menupreview .ancestor > a:after {
+    content: " ({% trans "Ancestor" %})";
+}
+#menupreview .sibling > a:after {
+    content: " ({% trans "Sibling" %})";
+}
+#menupreview .selected > a:after {
+    content: " ({% trans "Selected" %})";
+}
+#menupreview .descendant > a:after {
+    content: " ({% trans "Descendant" %})";
+}
+#menupreview li a:after {
+    content: " ({% trans "No relationship" %})";
+}
+
+
+#menupreview .ancestor a {
+    color: #888;
+    font-style: italic;
+}
+
+#menupreview .selected a {
+    color: black;
+    font-style: normal;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#menupreview .descendant a {
+    color: #888;
+    text-transform: none;
+    font-weight: normal;
+}
+
+#menupreview .sibling a {
+    font-style: normal;
+    color: #888;
+}
+
+#menupreview li a {
+    color: #BBB;
+    font-style: normal;
+    text-transform: none;
 }
 
 #menupreview a:hover {
